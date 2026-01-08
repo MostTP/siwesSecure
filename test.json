@@ -1,0 +1,631 @@
+{
+	"info": {
+		"name": "SIWESecure API",
+		"description": "Complete API collection for SIWESecure backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "student_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "supervisor_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "location_id",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register Student",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"matric_number\": \"ENG/20/001\",\n  \"full_name\": \"John Doe\",\n  \"institution\": \"University of Technology\",\n  \"department\": \"Computer Engineering\",\n  \"siwes_start_date\": \"2024-01-15\",\n  \"siwes_end_date\": \"2024-06-15\",\n  \"password\": \"student123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register/student",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "register", "student"]
+						}
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.collectionVariables.set(\"token\", jsonData.token);",
+									"    pm.collectionVariables.set(\"student_id\", jsonData.user.id);",
+									"}"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Register Industry Supervisor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"type\": \"INDUSTRY_SUPERVISOR\",\n  \"full_name\": \"Jane Smith\",\n  \"company_name\": \"Tech Solutions Ltd\",\n  \"official_email\": \"jane.smith@techsolutions.com\",\n  \"phone\": \"+2348012345678\",\n  \"password\": \"supervisor123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register/supervisor",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "register", "supervisor"]
+						}
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.collectionVariables.set(\"token\", jsonData.token);",
+									"    pm.collectionVariables.set(\"supervisor_id\", jsonData.user.id);",
+									"}"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Register Institution Supervisor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"type\": \"INSTITUTION_SUPERVISOR\",\n  \"full_name\": \"Dr. Michael Brown\",\n  \"institution\": \"University of Technology\",\n  \"staff_id\": \"STAFF/001\",\n  \"official_email\": \"m.brown@unitech.edu\",\n  \"password\": \"institution123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register/supervisor",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "register", "supervisor"]
+						}
+					}
+				},
+				{
+					"name": "Login Student",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"identifier\": \"ENG/20/001\",\n  \"password\": \"student123\",\n  \"role\": \"STUDENT\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "login"]
+						}
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.collectionVariables.set(\"token\", jsonData.token);",
+									"}"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Login Supervisor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"identifier\": \"jane.smith@techsolutions.com\",\n  \"password\": \"supervisor123\",\n  \"role\": \"INDUSTRY_SUPERVISOR\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "login"]
+						}
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.collectionVariables.set(\"token\", jsonData.token);",
+									"}"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Get Current User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/me",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "me"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Locations",
+			"item": [
+				{
+					"name": "Create Location (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"company_name\": \"Tech Solutions Ltd\",\n  \"latitude\": 6.5244,\n  \"longitude\": 3.3792,\n  \"allowed_radius_meters\": 100\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/locations",
+							"host": ["{{base_url}}"],
+							"path": ["api", "locations"]
+						}
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.collectionVariables.set(\"location_id\", jsonData.location.id);",
+									"}"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Get All Locations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/locations",
+							"host": ["{{base_url}}"],
+							"path": ["api", "locations"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Presence",
+			"item": [
+				{
+					"name": "Submit GPS Presence",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"latitude\": 6.5244,\n  \"longitude\": 3.3792\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/presence",
+							"host": ["{{base_url}}"],
+							"path": ["api", "presence"]
+						}
+					}
+				},
+				{
+					"name": "Get Presence History",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/presence/history",
+							"host": ["{{base_url}}"],
+							"path": ["api", "presence", "history"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Logbook",
+			"item": [
+				{
+					"name": "Create Log Entry",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"activity_description\": \"Worked on API development and database design. Attended team meeting.\",\n  \"presence_log_id\": null\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/logbook",
+							"host": ["{{base_url}}"],
+							"path": ["api", "logbook"]
+						}
+					}
+				},
+				{
+					"name": "Get My Log Entries",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/logbook",
+							"host": ["{{base_url}}"],
+							"path": ["api", "logbook"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Supervisor",
+			"item": [
+				{
+					"name": "Get Assigned Students (Industry)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/supervisor/students",
+							"host": ["{{base_url}}"],
+							"path": ["api", "supervisor", "students"]
+						}
+					}
+				},
+				{
+					"name": "Get Student Logs",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/supervisor/students/{{student_id}}/logs",
+							"host": ["{{base_url}}"],
+							"path": ["api", "supervisor", "students", "{{student_id}}", "logs"]
+						}
+					}
+				},
+				{
+					"name": "Submit Weekly Review (Friday Only)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"student_id\": \"{{student_id}}\",\n  \"week_number\": 1,\n  \"comment\": \"Good progress this week. Student showed initiative and completed assigned tasks.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/supervisor/review",
+							"host": ["{{base_url}}"],
+							"path": ["api", "supervisor", "review"]
+						}
+					}
+				},
+				{
+					"name": "Get All Students (Institution)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/supervisor/all-students",
+							"host": ["{{base_url}}"],
+							"path": ["api", "supervisor", "all-students"]
+						}
+					}
+				},
+				{
+					"name": "Submit Final Inspection",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"student_id\": \"{{student_id}}\",\n  \"inspection_notes\": \"Student completed SIWES successfully. All requirements met.\",\n  \"compliance_status\": \"COMPLIANT\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/supervisor/inspection",
+							"host": ["{{base_url}}"],
+							"path": ["api", "supervisor", "inspection"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Verify Supervisor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"supervisor_id\": \"{{supervisor_id}}\",\n  \"supervisor_type\": \"INDUSTRY_SUPERVISOR\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/admin/verify-supervisor",
+							"host": ["{{base_url}}"],
+							"path": ["api", "admin", "verify-supervisor"]
+						}
+					}
+				},
+				{
+					"name": "Assign Student to Supervisor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"student_id\": \"{{student_id}}\",\n  \"industry_supervisor_id\": \"{{supervisor_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/admin/assign-supervisor",
+							"host": ["{{base_url}}"],
+							"path": ["api", "admin", "assign-supervisor"]
+						}
+					}
+				},
+				{
+					"name": "Assign Student to Location",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"student_id\": \"{{student_id}}\",\n  \"company_location_id\": \"{{location_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/admin/assign-location",
+							"host": ["{{base_url}}"],
+							"path": ["api", "admin", "assign-location"]
+						}
+					}
+				},
+				{
+					"name": "Get Audit Logs",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/admin/audit-logs?limit=50&offset=0",
+							"host": ["{{base_url}}"],
+							"path": ["api", "admin", "audit-logs"],
+							"query": [
+								{
+									"key": "limit",
+									"value": "50"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get All Students",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/admin/students",
+							"host": ["{{base_url}}"],
+							"path": ["api", "admin", "students"]
+						}
+					}
+				},
+				{
+					"name": "Get All Supervisors",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/admin/supervisors",
+							"host": ["{{base_url}}"],
+							"path": ["api", "admin", "supervisors"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/health",
+					"host": ["{{base_url}}"],
+					"path": ["health"]
+				}
+			}
+		}
+	]
+}
+
