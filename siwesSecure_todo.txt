@@ -1,0 +1,324 @@
+SIWESecure – FULL BACKEND TO-DO (ALL ROLES, SECURITY-FIRST)
+
+Role: Backend Engineering
+Goal: Build a secure, auditable, role-aware SIWES management system with GPS presence validation and dual-supervisor oversight.
+
+🔑 SYSTEM ROLES & AUTHORITY MODEL (GLOBAL)
+Roles
+
+STUDENT
+
+INDUSTRY_SUPERVISOR
+
+INSTITUTION_SUPERVISOR
+
+ADMIN (Department SIWES Coordinator)
+
+🔐 Rule: Authority strictly flows downward — no role can approve or modify its own oversight.
+
+🗂️ WEEK 1 – IDENTITY, ROLES & SYSTEM FOUNDATION
+1️⃣ Authentication & Role Enforcement (ALL USERS)
+
+Backend Tasks
+
+Implement JWT-based authentication
+
+Store role in DB, embed in token
+
+Create middleware:
+
+authRequired
+
+requireRole()
+
+requireVerifiedSupervisor()
+
+🔐 Security-Critical
+
+Never trust frontend role claims
+
+Rotate JWT secrets in .env
+
+2️⃣ Core User Identity Models
+Students
+students (
+  id UUID,
+  matric_number UNIQUE,
+  full_name,
+  institution,
+  department,
+  siwes_start_date,
+  siwes_end_date,
+  company_location_id,
+  created_at
+)
+
+Industry Supervisors
+industry_supervisors (
+  id,
+  full_name,
+  company_name,
+  official_email,
+  phone,
+  signature_url,
+  stamp_url,
+  verified,
+  created_at
+)
+
+Institution Supervisors
+institution_supervisors (
+  id,
+  full_name,
+  institution,
+  staff_id,
+  official_email,
+  verified,
+  created_at
+)
+
+Admins
+admins (
+  id,
+  full_name,
+  email,
+  role_level
+)
+
+
+🔐 Security-Critical
+
+Only ADMIN can verify supervisors
+
+🌍 WEEK 2 – LOCATION, PRESENCE & LOGBOOK SYSTEM
+3️⃣ SIWES Company Location Management (ADMIN + SUPERVISORS)
+
+company_locations
+
+id
+company_name
+latitude
+longitude
+allowed_radius_meters
+
+
+Rules
+
+Admin registers approved SIWES locations
+
+Student is bound to one location
+
+🔐 Prevents multi-location abuse
+
+4️⃣ GPS Presence Validation (STUDENTS)
+
+presence_logs
+
+id
+student_id
+latitude
+longitude
+distance_m
+status (VALID / INVALID)
+timestamp
+
+
+Backend Logic
+
+Accept GPS coordinates
+
+Compute distance server-side
+
+Reject presence if outside radius
+
+🔐 Security-Critical
+
+GPS validation never done client-side
+
+All failures logged
+
+5️⃣ Daily Logbook Entries (STUDENTS)
+
+log_entries
+
+id
+student_id
+entry_date (SERVER DATE)
+week_number
+activity_description
+presence_log_id
+content_hash
+status (SUBMITTED / LOCKED)
+created_at
+
+
+Rules
+
+Log entry requires VALID presence
+
+Date cannot be backdated
+
+Hash generated on submission
+
+🔐 Prevents post-dated fabrication
+
+📅 WEEK 3 – SUPERVISOR VERIFICATION & INSPECTION
+6️⃣ Weekly Industry Supervisor Review (FRIDAY ONLY)
+
+weekly_reviews
+
+id
+student_id
+week_number
+industry_supervisor_id
+comment
+signature_url
+stamp_url
+review_hash
+reviewed_at
+
+
+Rules
+
+Allowed only Fridays
+
+Once reviewed → week is LOCKED
+
+No edits afterward
+
+🔐 Security-Critical
+
+Supervisor review is immutable
+
+7️⃣ Supervisor Dashboards API
+Industry Supervisor Can:
+
+View assigned students
+
+Review weekly logs
+
+Submit verification
+
+View presence history
+
+Institution Supervisor Can:
+
+View all student records (read-only)
+
+Inspect audit trail
+
+Submit final inspection
+
+8️⃣ Final Institutional Inspection (END OF SIWES)
+
+final_inspections
+
+id
+student_id
+institution_supervisor_id
+inspection_notes
+compliance_status
+inspection_hash
+inspected_at
+
+
+Rules
+
+Only after SIWES end date
+
+No modifications allowed
+
+🛡️ WEEK 4 – AUDIT, CLOUD STORAGE & HARDENING
+9️⃣ Global Audit Logging (ALL ROLES)
+
+audit_logs
+
+id
+actor_id
+actor_role
+action
+resource
+success
+ip_address
+created_at
+
+
+Log:
+
+Login attempts
+
+GPS failures
+
+Unauthorized access
+
+Edit attempts after lock
+
+Supervisor approvals
+
+🔐 Judges LOVE this
+
+🔟 Secure Cloud Storage (FILES)
+
+Store:
+
+Supervisor signatures
+
+Supervisor stamps
+
+Evidence documents
+
+Rules
+
+Generate file hash
+
+Save hash in DB
+
+Verify hash on access
+
+🔐 Detects file tampering
+
+1️⃣1️⃣ Admin Oversight APIs
+
+Admin can:
+
+View all audit logs
+
+Monitor supervisor activity
+
+Flag suspicious behavior
+
+Export SIWES reports (CSV/PDF)
+
+🎯 HIGH-IMPACT USE CASES (FULL SYSTEM)
+
+✔ Student edits past entry → Blocked + logged
+✔ Fake GPS submission → Rejected + logged
+✔ Supervisor approves → Week locked forever
+✔ Unauthorized access → Denied + audited
+✔ Institution inspects → Sees full history
+
+🏆 WHY THIS BACKEND SCORES HIGH
+
+Covers entire SIWES lifecycle
+
+Enforces real authority separation
+
+Uses location validation
+
+Provides forensic-level auditability
+
+Not a CRUD app — a trust system
+
+Want next?
+
+Frontend to-do (all roles)
+
+API endpoint map
+
+Threat model (STRIDE)
+
+3-minute demo script
+
+Judge explanation cheat-sheet
+
+Say the word 🚀
