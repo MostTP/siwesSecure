@@ -5,6 +5,8 @@ import authRoutes from './routes/auth.js';
 import locationRoutes from './routes/locations.js';
 import presenceRoutes from './routes/presence.js';
 import logbookRoutes from './routes/logbook.js';
+import supervisorRoutes from './routes/supervisor.js';
+import adminRoutes from './routes/admin.js';
 
 dotenv.config();
 
@@ -19,6 +21,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/locations', locationRoutes);
 app.use('/api/presence', presenceRoutes);
 app.use('/api/logbook', logbookRoutes);
+app.use('/api/supervisor', supervisorRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'SIWESecure API' });
